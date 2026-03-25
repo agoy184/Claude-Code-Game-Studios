@@ -6,7 +6,7 @@ extends CharacterBody2D
 class_name Player
 
 @export var move_speed: float = 200.0
-@export var attack_range: float = 40.0
+@export var attack_range: float = 100.0
 @export var attack_cooldown: float = 0.5
 
 var stats: StatsSystem
@@ -124,6 +124,7 @@ func perform_attack() -> void:
 
 	for enemy in enemies:
 		var distance = global_position.distance_to(enemy.global_position)
+		print("  Distance to enemy: %.1f (range: %.1f)" % [distance, attack_range])
 		if distance < closest_distance:
 			closest_distance = distance
 			closest_enemy = enemy
@@ -136,7 +137,7 @@ func perform_attack() -> void:
 		else:
 			print("Attack missed!")
 	else:
-		print("No enemies in attack range")
+		print("No enemies in attack range (closest was %.1f away)" % closest_distance)
 
 func _on_health_changed(new_health: int, max_health: int) -> void:
 	# Update HUD or visual representation

@@ -9,10 +9,13 @@ class_name Enemy
 @export var max_health: int = 30
 @export var attack_power: int = 5
 @export var defense: int = 0
+@export var attack_range: float = 60.0
+@export var attack_cooldown: float = 1.0
 
 var current_health: int
 var target: Player
 var collision_shape_2d: CollisionShape2D
+var attack_timer: float = 0.0
 
 signal died
 
@@ -45,21 +48,27 @@ func _ready() -> void:
 
 	print("ENEMY: _ready complete")
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if not is_node_alive():
 		return
 
 	if target == null:
 		return
 
+	# Update attack cooldown
+	if attack_timer > 0:
+		attack_timer -= delta
+
 	# Simple AI: move toward player
 	var direction = (target.global_position - global_position).normalized()
 	velocity = direction * move_speed
 	move_and_slide()
 
-	# Check if in attack range (simple collision)
-	if global_position.distance_to(target.global_position) < 40:
+	# Check if in attack range
+	var distance_to_target = global_position.distance_to(target.global_position)
+	if distance_to_target < attack_range and attack_timer <= 0:
 		attack_player()
+		attack_timer = attack_cooldown
 
 func attack_player() -> void:
 	if target and is_node_alive():
