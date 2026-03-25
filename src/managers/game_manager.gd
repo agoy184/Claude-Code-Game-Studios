@@ -14,6 +14,14 @@ var enemies_spawned: int = 0
 func _ready() -> void:
 	print("=== GAMEMANAGER READY ===")
 
+	# Create camera
+	print("Creating camera...")
+	var camera = Camera2D.new()
+	camera.global_position = Vector2(640, 360)
+	add_child(camera)
+	camera.make_current()
+	print("Camera created and made current")
+
 	# Create player
 	print("Creating player...")
 	player = CharacterBody2D.new()
