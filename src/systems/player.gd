@@ -10,6 +10,8 @@ class_name Player
 @export var attack_cooldown: float = 0.5
 
 var stats: StatsSystem
+var luck_system: LuckSystem
+var combat_resolver: CombatResolver
 var velocity_direction: Vector2 = Vector2.ZERO
 var can_attack: bool = true
 var enemy_spawner: EnemySpawner
@@ -22,9 +24,19 @@ func _ready() -> void:
 	stats = StatsSystem.new()
 	add_child(stats)
 
+	# Create and attach luck system
+	luck_system = LuckSystem.new()
+	add_child(luck_system)
+	luck_system.modify_luck(5)  # Start with 5 luck for testing
+
+	# Create combat resolver
+	combat_resolver = CombatResolver.new(luck_system, stats)
+	add_child(combat_resolver)
+
 	# Connect to stat changes for visual feedback
 	stats.health_changed.connect(_on_health_changed)
 	stats.luck_changed.connect(_on_luck_changed)
+	luck_system.luck_changed.connect(_on_luck_value_changed)
 
 	# Get reference to enemy spawner (will be set by GameManager)
 	enemy_spawner = get_tree().root.get_child(0).get_node("EnemySpawner") if get_tree().root.get_child(0).has_node("EnemySpawner") else null
@@ -63,7 +75,10 @@ func take_damage(amount: int) -> void:
 
 func perform_attack() -> void:
 	can_attack = false
-	print("Player attacks with power: %d" % stats.attack_power)
+	print("Player attacks! (Luck: %d, Hit Chance: %.0f%%)" % [
+		luck_system.get_luck(),
+		luck_system.calculate_hit_chance() * 100
+	])
 
 	if enemy_spawner == null:
 		can_attack = true
@@ -87,8 +102,12 @@ func perform_attack() -> void:
 			closest_enemy = enemy
 
 	if closest_enemy:
-		closest_enemy.take_damage(stats.attack_power)
-		print("Hit enemy!")
+		# Resolve attack with luck
+		var result = combat_resolver.resolve_attack(stats.attack_power)
+		if result["hit"]:
+			closest_enemy.take_damage(result["damage"])
+		else:
+			print("Attack missed!")
 	else:
 		print("No enemies in attack range")
 
@@ -99,4 +118,7 @@ func _on_health_changed(new_health: int, max_health: int) -> void:
 	print("Health: %d/%d" % [new_health, max_health])
 
 func _on_luck_changed(new_luck: int) -> void:
-	print("Luck: %d" % new_luck)
+	print("Luck stat: %d" % new_luck)
+
+func _on_luck_value_changed(new_luck: int) -> void:
+	print("Luck value changed to: %d (hit chance: %.0f%%)" % [new_luck, luck_system.calculate_hit_chance() * 100])
