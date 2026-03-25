@@ -23,10 +23,8 @@ func _ready() -> void:
 	enemy_spawner.script = preload("res://src/managers/enemy_spawner.gd")
 	add_child(enemy_spawner)
 
-	# Wait for nodes to be ready
-	await get_tree().process_frame
-
-	start_run()
+	# Call start_run directly (avoid await issues)
+	call_deferred("start_run")
 
 func start_run() -> void:
 	print("=== Starting Run ===")

@@ -4,9 +4,9 @@
 extends Node
 
 func _ready() -> void:
-	print("=== Game Starting ===")
-	await get_tree().process_frame
+	print("=== BOOTSTRAP STARTED ===")
 
-	# Create manager
+	# Create manager directly
 	var manager = GameManager.new()
 	add_child(manager)
+	print("=== GAMEMANAGER INSTANTIATED ===")
