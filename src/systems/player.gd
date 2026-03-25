@@ -16,11 +16,28 @@ var velocity_direction: Vector2 = Vector2.ZERO
 var can_attack: bool = true
 var attack_timer: float = 0.0
 var enemy_spawner: EnemySpawner
-
-@onready var sprite_2d = $Sprite2D
-@onready var collision_shape_2d = $CollisionShape2D
+var sprite_2d: Sprite2D
+var collision_shape_2d: CollisionShape2D
 
 func _ready() -> void:
+	# Create sprite if not in scene
+	if not has_node("Sprite2D"):
+		sprite_2d = Sprite2D.new()
+		sprite_2d.name = "Sprite2D"
+		sprite_2d.scale = Vector2(2, 2)
+		sprite_2d.self_modulate = Color.GREEN
+		add_child(sprite_2d)
+
+	# Create collision if not in scene
+	if not has_node("CollisionShape2D"):
+		collision_shape_2d = CollisionShape2D.new()
+		collision_shape_2d.name = "CollisionShape2D"
+		var shape = CapsuleShape2D.new()
+		shape.radius = 16.0
+		shape.height = 32.0
+		collision_shape_2d.shape = shape
+		add_child(collision_shape_2d)
+
 	# Create and attach stats system
 	stats = StatsSystem.new()
 	add_child(stats)
@@ -57,7 +74,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	# Update facing direction for sprite
-	if velocity_direction != Vector2.ZERO:
+	if sprite_2d and velocity_direction != Vector2.ZERO:
 		if velocity_direction.x < 0:
 			sprite_2d.flip_h = true
 		elif velocity_direction.x > 0:

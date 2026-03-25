@@ -12,15 +12,38 @@ class_name Enemy
 
 var current_health: int
 var target: Player
-
-@onready var sprite_2d = $Sprite2D
-@onready var collision_shape_2d = $CollisionShape2D
+var sprite_2d: Sprite2D
+var collision_shape_2d: CollisionShape2D
 
 signal died
 
 func _ready() -> void:
 	current_health = max_health
-	sprite_2d.modulate = Color.RED
+
+	# Create sprite if not in scene
+	if not has_node("Sprite2D"):
+		sprite_2d = Sprite2D.new()
+		sprite_2d.name = "Sprite2D"
+		sprite_2d.scale = Vector2(2, 2)
+		sprite_2d.self_modulate = Color.RED
+		add_child(sprite_2d)
+	else:
+		sprite_2d = $Sprite2D
+
+	# Create collision if not in scene
+	if not has_node("CollisionShape2D"):
+		collision_shape_2d = CollisionShape2D.new()
+		collision_shape_2d.name = "CollisionShape2D"
+		var shape = CapsuleShape2D.new()
+		shape.radius = 16.0
+		shape.height = 32.0
+		collision_shape_2d.shape = shape
+		add_child(collision_shape_2d)
+	else:
+		collision_shape_2d = $CollisionShape2D
+
+	if sprite_2d:
+		sprite_2d.modulate = Color.RED
 
 func _physics_process(delta: float) -> void:
 	if not is_node_alive():

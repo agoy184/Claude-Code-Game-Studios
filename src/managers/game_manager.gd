@@ -12,8 +12,20 @@ var run_active: bool = false
 var enemies_spawned: int = 0
 
 func _ready() -> void:
-	player = $Player
-	enemy_spawner = $EnemySpawner
+	# Create player
+	player = CharacterBody2D.new()
+	player.script = preload("res://src/systems/player.gd")
+	player.position = Vector2(640, 360)
+	add_child(player)
+
+	# Create enemy spawner
+	enemy_spawner = Node2D.new()
+	enemy_spawner.script = preload("res://src/managers/enemy_spawner.gd")
+	add_child(enemy_spawner)
+
+	# Wait for nodes to be ready
+	await get_tree().process_frame
+
 	start_run()
 
 func start_run() -> void:
@@ -61,9 +73,7 @@ func _physics_process(_delta: float) -> void:
 func end_run_death() -> void:
 	print("=== Run Ended (Death) ===")
 	run_active = false
-	# TODO: Load run summary screen
 
 func end_run_victory() -> void:
 	print("=== Run Ended (Victory) ===")
 	run_active = false
-	# TODO: Load run summary screen or next area
