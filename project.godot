@@ -17,7 +17,7 @@ config/icon="res://assets/icon.svg"
 
 [autoload]
 
-Bootstrap="*res://src/bootstrap.gd"
+Bootstrap="*res://src/test_minimal.gd"
 
 [display]
 
