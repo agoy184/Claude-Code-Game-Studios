@@ -14,6 +14,7 @@ var luck_system: LuckSystem
 var combat_resolver: CombatResolver
 var velocity_direction: Vector2 = Vector2.ZERO
 var can_attack: bool = true
+var attack_timer: float = 0.0
 var enemy_spawner: EnemySpawner
 
 @onready var sprite_2d = $Sprite2D
@@ -38,8 +39,10 @@ func _ready() -> void:
 	stats.luck_changed.connect(_on_luck_changed)
 	luck_system.luck_changed.connect(_on_luck_value_changed)
 
-	# Get reference to enemy spawner (will be set by GameManager)
-	enemy_spawner = get_tree().root.get_child(0).get_node("EnemySpawner") if get_tree().root.get_child(0).has_node("EnemySpawner") else null
+	# Get reference to enemy spawner parent node
+	var parent = get_parent()
+	if parent and parent.has_node("EnemySpawner"):
+		enemy_spawner = parent.get_node("EnemySpawner")
 
 func _physics_process(delta: float) -> void:
 	# Get input
@@ -55,40 +58,40 @@ func _physics_process(delta: float) -> void:
 
 	# Update facing direction for sprite
 	if velocity_direction != Vector2.ZERO:
-		# Flip sprite if moving left
 		if velocity_direction.x < 0:
 			sprite_2d.flip_h = true
 		elif velocity_direction.x > 0:
 			sprite_2d.flip_h = false
 
+	# Update attack cooldown timer
+	if not can_attack:
+		attack_timer -= delta
+		if attack_timer <= 0:
+			can_attack = true
+
 	# Handle attack input
 	if Input.is_action_just_pressed("ui_accept") and can_attack:
 		perform_attack()
-
-	# Update attack cooldown
-	if not can_attack:
-		await get_tree().create_timer(attack_cooldown).timeout
-		can_attack = true
 
 func take_damage(amount: int) -> void:
 	stats.take_damage(amount)
 
 func perform_attack() -> void:
 	can_attack = false
+	attack_timer = attack_cooldown
 	print("Player attacks! (Luck: %d, Hit Chance: %.0f%%)" % [
 		luck_system.get_luck(),
 		luck_system.calculate_hit_chance() * 100
 	])
 
 	if enemy_spawner == null:
-		can_attack = true
+		print("No enemy spawner found")
 		return
 
 	# Find nearby enemies
 	var enemies = enemy_spawner.get_all_enemies()
 	if enemies.is_empty():
 		print("No enemies to attack")
-		can_attack = true
 		return
 
 	# Attack the closest enemy in range
@@ -110,8 +113,6 @@ func perform_attack() -> void:
 			print("Attack missed!")
 	else:
 		print("No enemies in attack range")
-
-	can_attack = true
 
 func _on_health_changed(new_health: int, max_health: int) -> void:
 	# Update HUD or visual representation
