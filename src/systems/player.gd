@@ -20,8 +20,11 @@ var sprite_2d: Sprite2D
 var collision_shape_2d: CollisionShape2D
 
 func _ready() -> void:
+	print("PLAYER: _ready called")
+
 	# Create sprite if not in scene
 	if not has_node("Sprite2D"):
+		print("PLAYER: Creating Sprite2D")
 		sprite_2d = Sprite2D.new()
 		sprite_2d.name = "Sprite2D"
 		sprite_2d.scale = Vector2(2, 2)
@@ -30,6 +33,7 @@ func _ready() -> void:
 
 	# Create collision if not in scene
 	if not has_node("CollisionShape2D"):
+		print("PLAYER: Creating CollisionShape2D")
 		collision_shape_2d = CollisionShape2D.new()
 		collision_shape_2d.name = "CollisionShape2D"
 		var shape = CapsuleShape2D.new()
@@ -38,28 +42,38 @@ func _ready() -> void:
 		collision_shape_2d.shape = shape
 		add_child(collision_shape_2d)
 
+	print("PLAYER: Creating stats system")
 	# Create and attach stats system
 	stats = StatsSystem.new()
 	add_child(stats)
 
+	print("PLAYER: Creating luck system")
 	# Create and attach luck system
 	luck_system = LuckSystem.new()
 	add_child(luck_system)
 	luck_system.modify_luck(5)  # Start with 5 luck for testing
 
+	print("PLAYER: Creating combat resolver")
 	# Create combat resolver
 	combat_resolver = CombatResolver.new(luck_system, stats)
 	add_child(combat_resolver)
 
+	print("PLAYER: Connecting signals")
 	# Connect to stat changes for visual feedback
 	stats.health_changed.connect(_on_health_changed)
 	stats.luck_changed.connect(_on_luck_changed)
 	luck_system.luck_changed.connect(_on_luck_value_changed)
 
+	print("PLAYER: Finding enemy spawner")
 	# Get reference to enemy spawner parent node
 	var parent = get_parent()
 	if parent and parent.has_node("EnemySpawner"):
 		enemy_spawner = parent.get_node("EnemySpawner")
+		print("PLAYER: Enemy spawner found")
+	else:
+		print("PLAYER: Enemy spawner NOT found")
+
+	print("PLAYER: _ready complete")
 
 func _physics_process(delta: float) -> void:
 	# Get input

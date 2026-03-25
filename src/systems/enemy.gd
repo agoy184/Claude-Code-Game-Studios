@@ -18,10 +18,12 @@ var collision_shape_2d: CollisionShape2D
 signal died
 
 func _ready() -> void:
+	print("ENEMY: _ready called")
 	current_health = max_health
 
 	# Create sprite if not in scene
 	if not has_node("Sprite2D"):
+		print("ENEMY: Creating Sprite2D")
 		sprite_2d = Sprite2D.new()
 		sprite_2d.name = "Sprite2D"
 		sprite_2d.scale = Vector2(2, 2)
@@ -32,6 +34,7 @@ func _ready() -> void:
 
 	# Create collision if not in scene
 	if not has_node("CollisionShape2D"):
+		print("ENEMY: Creating CollisionShape2D")
 		collision_shape_2d = CollisionShape2D.new()
 		collision_shape_2d.name = "CollisionShape2D"
 		var shape = CapsuleShape2D.new()
@@ -44,6 +47,8 @@ func _ready() -> void:
 
 	if sprite_2d:
 		sprite_2d.modulate = Color.RED
+
+	print("ENEMY: _ready complete")
 
 func _physics_process(delta: float) -> void:
 	if not is_node_alive():

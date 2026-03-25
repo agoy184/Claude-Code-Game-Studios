@@ -12,19 +12,26 @@ var run_active: bool = false
 var enemies_spawned: int = 0
 
 func _ready() -> void:
+	print("=== GAMEMANAGER READY ===")
+
 	# Create player
+	print("Creating player...")
 	player = CharacterBody2D.new()
 	player.script = preload("res://src/systems/player.gd")
 	player.position = Vector2(640, 360)
 	add_child(player)
+	print("Player created")
 
 	# Create enemy spawner
+	print("Creating enemy spawner...")
 	enemy_spawner = Node2D.new()
 	enemy_spawner.script = preload("res://src/managers/enemy_spawner.gd")
 	add_child(enemy_spawner)
+	print("Enemy spawner created")
 
 	# Call start_run directly (avoid await issues)
 	call_deferred("start_run")
+	print("start_run queued")
 
 func start_run() -> void:
 	print("=== Starting Run ===")

@@ -1,12 +1,9 @@
-## Bootstrap - starts the game as an autoload
-## This bypasses scene file issues entirely
-
+## Bootstrap - starts the game
 extends Node
 
 func _ready() -> void:
-	print("=== BOOTSTRAP STARTED ===")
+	print("=== BOOTSTRAP READY ===")
 
-	# Create manager directly
+	# Create GameManager
 	var manager = GameManager.new()
 	add_child(manager)
-	print("=== GAMEMANAGER INSTANTIATED ===")
