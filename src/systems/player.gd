@@ -16,20 +16,20 @@ var velocity_direction: Vector2 = Vector2.ZERO
 var can_attack: bool = true
 var attack_timer: float = 0.0
 var enemy_spawner: EnemySpawner
-var sprite_2d: Sprite2D
 var collision_shape_2d: CollisionShape2D
 
 func _ready() -> void:
 	print("PLAYER: _ready called")
 
-	# Create sprite if not in scene
-	if not has_node("Sprite2D"):
-		print("PLAYER: Creating Sprite2D")
-		sprite_2d = Sprite2D.new()
-		sprite_2d.name = "Sprite2D"
-		sprite_2d.scale = Vector2(2, 2)
-		sprite_2d.self_modulate = Color.GREEN
-		add_child(sprite_2d)
+	# Create visual rect if not in scene
+	if not has_node("Visual"):
+		print("PLAYER: Creating ColorRect")
+		var visual = ColorRect.new()
+		visual.name = "Visual"
+		visual.size = Vector2(32, 32)
+		visual.position = Vector2(-16, -16)
+		visual.color = Color.GREEN
+		add_child(visual)
 
 	# Create collision if not in scene
 	if not has_node("CollisionShape2D"):
@@ -86,13 +86,6 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 
 	move_and_slide()
-
-	# Update facing direction for sprite
-	if sprite_2d and velocity_direction != Vector2.ZERO:
-		if velocity_direction.x < 0:
-			sprite_2d.flip_h = true
-		elif velocity_direction.x > 0:
-			sprite_2d.flip_h = false
 
 	# Update attack cooldown timer
 	if not can_attack:

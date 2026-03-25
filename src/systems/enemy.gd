@@ -12,7 +12,6 @@ class_name Enemy
 
 var current_health: int
 var target: Player
-var sprite_2d: Sprite2D
 var collision_shape_2d: CollisionShape2D
 
 signal died
@@ -21,16 +20,15 @@ func _ready() -> void:
 	print("ENEMY: _ready called")
 	current_health = max_health
 
-	# Create sprite if not in scene
-	if not has_node("Sprite2D"):
-		print("ENEMY: Creating Sprite2D")
-		sprite_2d = Sprite2D.new()
-		sprite_2d.name = "Sprite2D"
-		sprite_2d.scale = Vector2(2, 2)
-		sprite_2d.self_modulate = Color.RED
-		add_child(sprite_2d)
-	else:
-		sprite_2d = $Sprite2D
+	# Create visual rect if not in scene
+	if not has_node("Visual"):
+		print("ENEMY: Creating ColorRect")
+		var visual = ColorRect.new()
+		visual.name = "Visual"
+		visual.size = Vector2(32, 32)
+		visual.position = Vector2(-16, -16)
+		visual.color = Color.RED
+		add_child(visual)
 
 	# Create collision if not in scene
 	if not has_node("CollisionShape2D"):
@@ -44,9 +42,6 @@ func _ready() -> void:
 		add_child(collision_shape_2d)
 	else:
 		collision_shape_2d = $CollisionShape2D
-
-	if sprite_2d:
-		sprite_2d.modulate = Color.RED
 
 	print("ENEMY: _ready complete")
 
