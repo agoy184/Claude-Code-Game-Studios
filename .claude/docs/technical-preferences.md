@@ -5,42 +5,44 @@
 
 ## Engine & Language
 
-- **Engine**: [TO BE CONFIGURED — run /setup-engine]
-- **Language**: [TO BE CONFIGURED]
-- **Rendering**: [TO BE CONFIGURED]
-- **Physics**: [TO BE CONFIGURED]
+- **Engine**: Godot 4.6
+- **Language**: GDScript (primary)
+- **Rendering**: Godot 2D (Canvas Renderer via D3D12 on Windows)
+- **Physics**: Godot Physics 2D (default)
 
 ## Naming Conventions
 
-- **Classes**: [TO BE CONFIGURED]
-- **Variables**: [TO BE CONFIGURED]
-- **Signals/Events**: [TO BE CONFIGURED]
-- **Files**: [TO BE CONFIGURED]
-- **Scenes/Prefabs**: [TO BE CONFIGURED]
-- **Constants**: [TO BE CONFIGURED]
+- **Classes**: PascalCase (e.g., `PlayerController`, `ItemManager`)
+- **Variables**: snake_case (e.g., `move_speed`, `max_health`)
+- **Signals/Events**: snake_case past tense (e.g., `health_changed`, `item_acquired`)
+- **Files**: snake_case matching class (e.g., `player_controller.gd`)
+- **Scenes**: PascalCase matching root node (e.g., `PlayerController.tscn`)
+- **Constants**: UPPER_SNAKE_CASE (e.g., `MAX_HEALTH`, `DEFAULT_SPEED`)
 
 ## Performance Budgets
 
-- **Target Framerate**: [TO BE CONFIGURED]
-- **Frame Budget**: [TO BE CONFIGURED]
-- **Draw Calls**: [TO BE CONFIGURED]
-- **Memory Ceiling**: [TO BE CONFIGURED]
+- **Target Framerate**: 60 FPS
+- **Frame Budget**: 16.6 ms per frame
+- **Draw Calls**: Minimize via batching (typical 2D roguelike: ~30-50 draw calls)
+- **Memory Ceiling**: ~200 MB target (jam submission friendly)
 
 ## Testing
 
-- **Framework**: [TO BE CONFIGURED]
-- **Minimum Coverage**: [TO BE CONFIGURED]
-- **Required Tests**: Balance formulas, gameplay systems, networking (if applicable)
+- **Framework**: GUT (Godot Unit Testing)
+- **Minimum Coverage**: Jam entry—playtest-driven rather than unit-test-heavy
+- **Required Tests**: Balance formulas (RNG, stat scaling), loot drop rates, progression unlocks
 
 ## Forbidden Patterns
 
 <!-- Add patterns that should never appear in this project's codebase -->
-- [None configured yet — add as architectural decisions are made]
+- Hardcoded balance numbers (use external config files instead)
+- Singletons for gameplay state (use proper signal connections)
 
 ## Allowed Libraries / Addons
 
 <!-- Add approved third-party dependencies here -->
-- [None configured yet — add as dependencies are approved]
+- GUT (Godot Unit Testing) — for balance formula tests
+- None others added yet — prefer engine built-ins
 
 ## Architecture Decisions Log
 
