@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://crg851hkwmb4k"]
+[gd_scene load_steps=4 format=3 uid="uid://crg851hkwmb4k"]
 
 [ext_resource type="Script" path="res://src/managers/game_manager.gd"]
 [ext_resource type="Script" path="res://src/systems/player.gd"]
