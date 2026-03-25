@@ -10,6 +10,7 @@ var enemy_spawner: Node
 var current_room: int = 0
 var run_active: bool = false
 var enemies_spawned: int = 0
+var boss_spawned: bool = false
 
 func _ready() -> void:
 	print("=== GAMEMANAGER READY ===")

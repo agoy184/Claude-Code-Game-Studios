@@ -153,7 +153,7 @@ func perform_attack() -> void:
 		# Resolve attack with luck
 		var result = combat_resolver.resolve_attack(stats.attack_power)
 		if result["hit"]:
-			closest_enemy.take_damage(result["damage"])
+			closest_enemy.take_damage(result["damage"], result["critical"])
 		else:
 			print("Attack missed!")
 	else:
