@@ -42,6 +42,19 @@ func _ready() -> void:
 		collision_shape_2d.shape = shape
 		add_child(collision_shape_2d)
 
+	# Create pickup detection area
+	if not has_node("PickupArea"):
+		print("PLAYER: Creating pickup detection area")
+		var pickup_area = Area2D.new()
+		pickup_area.name = "PickupArea"
+		var area_collision = CollisionShape2D.new()
+		var area_shape = CircleShape2D.new()
+		area_shape.radius = 40.0
+		area_collision.shape = area_shape
+		pickup_area.add_child(area_collision)
+		pickup_area.area_entered.connect(_on_area_entered)
+		add_child(pickup_area)
+
 	print("PLAYER: Creating stats system")
 	# Create and attach stats system
 	stats = StatsSystem.new()
@@ -155,3 +168,8 @@ func _on_luck_changed(new_luck: int) -> void:
 
 func _on_luck_value_changed(new_luck: int) -> void:
 	print("Luck value changed to: %d (hit chance: %.0f%%)" % [new_luck, luck_system.calculate_hit_chance() * 100])
+
+func _on_area_entered(area: Area2D) -> void:
+	if area is LootItem:
+		print("Player collided with loot!")
+		area.collect()

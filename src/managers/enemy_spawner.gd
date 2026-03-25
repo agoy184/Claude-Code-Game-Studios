@@ -30,20 +30,7 @@ func spawn_enemy(spawn_pos: Vector2, health: int = 30, attack: int = 5) -> Enemy
 	enemy.max_health = health
 	enemy.current_health = health
 	enemy.attack_power = attack
-
-	# Create visual representation
-	var sprite = Sprite2D.new()
-	sprite.self_modulate = Color.RED
-	sprite.scale = Vector2(2, 2)
-
-	var collision = CollisionShape2D.new()
-	var shape = CapsuleShape2D.new()
-	shape.radius = 16.0
-	shape.height = 32.0
-	collision.shape = shape
-
-	enemy.add_child(sprite)
-	enemy.add_child(collision)
+	enemy.spawner = self
 
 	add_child(enemy)
 	spawned_enemies.append(enemy)
@@ -57,3 +44,11 @@ func _on_enemy_died(enemy: Enemy) -> void:
 
 func get_all_enemies() -> Array[Enemy]:
 	return spawned_enemies
+
+func spawn_loot(position: Vector2) -> void:
+	print("Spawning loot at %.0f, %.0f" % [position.x, position.y])
+	var loot = LootItem.new()
+	loot.position = position
+	loot.item_type = "gold"
+	loot.amount = 10
+	add_child(loot)

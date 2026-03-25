@@ -16,6 +16,7 @@ var current_health: int
 var target: Player
 var collision_shape_2d: CollisionShape2D
 var attack_timer: float = 0.0
+var spawner: Node
 
 signal died
 
@@ -85,6 +86,11 @@ func take_damage(amount: int) -> void:
 func die() -> void:
 	print("Enemy died")
 	died.emit()
+
+	# Signal spawner to drop loot
+	if spawner:
+		spawner.spawn_loot(global_position)
+
 	queue_free()
 
 func is_node_alive() -> bool:
