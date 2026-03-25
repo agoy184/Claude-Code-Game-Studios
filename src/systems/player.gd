@@ -97,6 +97,13 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept") and can_attack:
 		perform_attack()
 
+	# Redraw to update range indicator
+	queue_redraw()
+
+func _draw() -> void:
+	# Draw attack range circle (semi-transparent)
+	draw_circle(Vector2.ZERO, attack_range, Color(1, 1, 0, 0.1))
+
 func take_damage(amount: int) -> void:
 	stats.take_damage(amount)
 
