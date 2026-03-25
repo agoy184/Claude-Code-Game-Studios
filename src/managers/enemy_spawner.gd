@@ -24,9 +24,9 @@ func _create_default_enemy_template() -> void:
 	# This will be rendered as a simple red square
 	enemy_template = Enemy.new()
 
-func spawn_enemy(position: Vector2, health: int = 30, attack: int = 5) -> Enemy:
+func spawn_enemy(spawn_pos: Vector2, health: int = 30, attack: int = 5) -> Enemy:
 	var enemy = Enemy.new()
-	enemy.global_position = position
+	enemy.global_position = spawn_pos
 	enemy.max_health = health
 	enemy.current_health = health
 	enemy.attack_power = attack

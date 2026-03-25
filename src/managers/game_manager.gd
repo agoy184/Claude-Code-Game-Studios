@@ -5,8 +5,8 @@
 extends Node
 class_name GameManager
 
-var player: Player
-var enemy_spawner: EnemySpawner
+var player: Node
+var enemy_spawner: Node
 var current_room: int = 0
 var run_active: bool = false
 var enemies_spawned: int = 0

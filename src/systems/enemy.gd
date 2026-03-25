@@ -45,7 +45,7 @@ func _ready() -> void:
 
 	print("ENEMY: _ready complete")
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if not is_node_alive():
 		return
 
