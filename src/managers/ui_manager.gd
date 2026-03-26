@@ -65,11 +65,13 @@ func show_game_over() -> void:
 	overlay.color = Color(0, 0, 0, 0.7)
 	overlay.size = get_viewport().get_visible_rect().size
 	overlay.position = Vector2.ZERO
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Don't consume input
 	add_child(overlay)
 
 	# Create game over panel
 	game_over_panel = Control.new()
 	game_over_panel.position = Vector2(640 - 250, 360 - 150)
+	game_over_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Don't consume input
 	add_child(game_over_panel)
 
 	# Title
@@ -120,4 +122,5 @@ func _process(_delta: float) -> void:
 
 	# Check for restart
 	if is_game_over and Input.is_action_just_pressed("ui_accept"):
+		print("RESTART: Space pressed, reloading scene...")
 		get_tree().reload_current_scene()
