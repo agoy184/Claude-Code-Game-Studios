@@ -63,7 +63,7 @@ func show_game_over() -> void:
 	# Create semi-transparent overlay
 	var overlay = ColorRect.new()
 	overlay.color = Color(0, 0, 0, 0.7)
-	overlay.size = get_viewport_rect().size
+	overlay.size = get_viewport().get_visible_rect().size
 	overlay.position = Vector2.ZERO
 	add_child(overlay)
 

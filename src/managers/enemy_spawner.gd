@@ -24,7 +24,7 @@ func _create_default_enemy_template() -> void:
 	# This will be rendered as a simple red square
 	enemy_template = Enemy.new()
 
-func spawn_enemy(spawn_pos: Vector2, max_health: int = 30, attack_power: int = 5, enemy_type: String = "goblin") -> Enemy:
+func spawn_enemy(spawn_pos: Vector2, max_health: int = 30, attack_power: int = 5, _enemy_type: String = "goblin") -> Enemy:
 	var enemy = Enemy.new()
 	enemy.max_health = max_health
 	enemy.attack_power = attack_power
@@ -43,10 +43,10 @@ func _on_enemy_died(enemy: Enemy) -> void:
 func get_all_enemies() -> Array[Enemy]:
 	return spawned_enemies
 
-func spawn_loot(position: Vector2) -> void:
-	print("Spawning loot at %.0f, %.0f" % [position.x, position.y])
+func spawn_loot(loot_pos: Vector2) -> void:
+	print("Spawning loot at %.0f, %.0f" % [loot_pos.x, loot_pos.y])
 	var loot = LootItem.new()
-	loot.position = position
+	loot.position = loot_pos
 	loot.item_type = "gold"
 	loot.amount = 10
 	add_child(loot)
