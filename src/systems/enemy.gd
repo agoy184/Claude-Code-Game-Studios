@@ -65,13 +65,23 @@ func attack_player() -> void:
 	if target and is_node_alive():
 		target.take_damage(attack_power)
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, is_critical: bool = false) -> void:
 	var reduced_damage = max(1, amount - defense)
 	current_health = max(0, current_health - reduced_damage)
 	print("Enemy health: %d/%d" % [current_health, max_health])
 
+	# Show floating damage number
+	_show_damage_feedback(reduced_damage, is_critical)
+
 	if current_health <= 0:
 		die()
+
+func _show_damage_feedback(damage: int, is_critical: bool) -> void:
+	# Create floating damage number at enemy position
+	var damage_popup = FloatingDamageNumber.new()
+	damage_popup.global_position = global_position
+	get_parent().add_child(damage_popup)
+	damage_popup.show_damage(damage, is_critical)
 
 func die() -> void:
 	print("Enemy died")
