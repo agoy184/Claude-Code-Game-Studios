@@ -24,11 +24,11 @@ func _create_default_enemy_template() -> void:
 	# This will be rendered as a simple red square
 	enemy_template = Enemy.new()
 
-func spawn_enemy(spawn_pos: Vector2, enemy_type: String = "goblin") -> Enemy:
+func spawn_enemy(spawn_pos: Vector2, max_health: int = 30, attack_power: int = 5, enemy_type: String = "goblin") -> Enemy:
 	var enemy = Enemy.new()
-	enemy.enemy_type = enemy_type
+	enemy.max_health = max_health
+	enemy.attack_power = attack_power
 	enemy.global_position = spawn_pos
-	enemy.spawner = self
 
 	add_child(enemy)
 	spawned_enemies.append(enemy)
