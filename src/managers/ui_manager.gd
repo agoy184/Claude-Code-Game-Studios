@@ -56,6 +56,10 @@ func _on_health_changed(current: int, max_val: int) -> void:
 	if current <= 0 and not is_game_over:
 		show_game_over()
 
+func reload_scene() -> void:
+	print("RELOAD: Reloading scene now...")
+	get_tree().reload_current_scene()
+
 func show_game_over() -> void:
 	is_game_over = true
 	print("=== GAME OVER ===")
@@ -123,4 +127,4 @@ func _process(_delta: float) -> void:
 	# Check for restart
 	if is_game_over and Input.is_action_just_pressed("ui_accept"):
 		print("RESTART: Space pressed, reloading scene...")
-		get_tree().reload_current_scene()
+		call_deferred("reload_scene")
