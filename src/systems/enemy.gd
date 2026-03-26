@@ -9,6 +9,7 @@ class_name Enemy
 @export var max_health: int = 30
 @export var attack_power: int = 5
 @export var defense: int = 0
+@export var attack_cooldown: float = 1.5
 
 var current_health: int
 var target: Player
@@ -16,6 +17,8 @@ var collision_shape_2d: CollisionShape2D
 var health_bar_container: Node2D
 var health_bar: ColorRect
 var health_label: Label
+var can_attack: bool = true
+var attack_timer: float = 0.0
 
 signal died
 
@@ -58,17 +61,25 @@ func _physics_process(_delta: float) -> void:
 	if target == null:
 		return
 
+	# Update attack cooldown
+	if not can_attack:
+		attack_timer -= _delta
+		if attack_timer <= 0:
+			can_attack = true
+
 	# Simple AI: move toward player
 	var direction = (target.global_position - global_position).normalized()
 	velocity = direction * move_speed
 	move_and_slide()
 
-	# Check if in attack range (simple collision)
-	if global_position.distance_to(target.global_position) < 40:
+	# Check if in attack range
+	if global_position.distance_to(target.global_position) < 40 and can_attack:
 		attack_player()
 
 func attack_player() -> void:
 	if target and is_node_alive():
+		can_attack = false
+		attack_timer = attack_cooldown
 		target.take_damage(attack_power)
 
 func take_damage(amount: int, is_critical: bool = false) -> void:

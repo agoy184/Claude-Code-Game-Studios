@@ -6,8 +6,8 @@ extends Node
 class_name StatsSystem
 
 ## Health
-var max_health: int = 100
-var current_health: int = 100
+var max_health: int = 150
+var current_health: int = 150
 
 ## Damage output
 var attack_power: int = 10
