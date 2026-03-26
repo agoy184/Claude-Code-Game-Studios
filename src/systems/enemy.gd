@@ -13,6 +13,9 @@ class_name Enemy
 var current_health: int
 var target: Player
 var collision_shape_2d: CollisionShape2D
+var health_bar_container: Node2D
+var health_bar: ColorRect
+var health_label: Label
 
 signal died
 
@@ -43,6 +46,9 @@ func _ready() -> void:
 	else:
 		collision_shape_2d = $CollisionShape2D
 
+	# Create health bar UI
+	_create_health_bar()
+
 	print("ENEMY: _ready complete")
 
 func _physics_process(_delta: float) -> void:
@@ -70,6 +76,9 @@ func take_damage(amount: int, is_critical: bool = false) -> void:
 	current_health = max(0, current_health - reduced_damage)
 	print("Enemy health: %d/%d" % [current_health, max_health])
 
+	# Update health bar display
+	_update_health_bar()
+
 	# Show floating damage number
 	_show_damage_feedback(reduced_damage, is_critical)
 
@@ -82,6 +91,52 @@ func _show_damage_feedback(damage: int, is_critical: bool) -> void:
 	damage_popup.global_position = global_position
 	get_parent().add_child(damage_popup)
 	damage_popup.show_damage(damage, is_critical)
+
+func _create_health_bar() -> void:
+	# Create container for health bar UI
+	health_bar_container = Node2D.new()
+	health_bar_container.position = Vector2(0, -50)
+	add_child(health_bar_container)
+
+	# Create background bar (dark red)
+	var bg_bar = ColorRect.new()
+	bg_bar.position = Vector2(-20, 0)
+	bg_bar.size = Vector2(40, 8)
+	bg_bar.color = Color(0.3, 0.1, 0.1, 0.8)
+	health_bar_container.add_child(bg_bar)
+
+	# Create health bar (bright green)
+	health_bar = ColorRect.new()
+	health_bar.position = Vector2(-20, 0)
+	health_bar.size = Vector2(40, 8)
+	health_bar.color = Color.GREEN
+	health_bar_container.add_child(health_bar)
+
+	# Create health label
+	health_label = Label.new()
+	health_label.position = Vector2(-25, -20)
+	health_label.add_theme_font_size_override("font_size", 16)
+	health_label.add_theme_color_override("font_color", Color.WHITE)
+	health_bar_container.add_child(health_label)
+
+	_update_health_bar()
+
+func _update_health_bar() -> void:
+	if health_bar and health_label:
+		# Update bar width based on health percentage
+		var health_percent = float(current_health) / float(max_health)
+		health_bar.size.x = 40 * health_percent
+
+		# Update color based on health
+		if health_percent > 0.5:
+			health_bar.color = Color.GREEN
+		elif health_percent > 0.25:
+			health_bar.color = Color.YELLOW
+		else:
+			health_bar.color = Color.RED
+
+		# Update label
+		health_label.text = "%d/%d" % [current_health, max_health]
 
 func die() -> void:
 	print("Enemy died")
