@@ -33,8 +33,9 @@ func _on_area_entered(area: Area2D) -> void:
 	if collected:
 		return
 
-	# Check if player picked it up
-	if area is Player or (area.get_parent() is Player):
+	# Check if player picked it up (area is PickupArea, whose parent is Player)
+	var parent = area.get_parent()
+	if parent and parent is Player:
 		collect()
 
 func collect() -> void:

@@ -23,19 +23,20 @@ func _ready() -> void:
 	camera.make_current()
 	print("Camera created and made current")
 
-	# Create UI manager
-	print("Creating UI manager...")
-	var ui_manager = UIManager.new()
-	add_child(ui_manager)
-	print("UI manager created")
-
-	# Create player
+	# Create player FIRST (before UI)
 	print("Creating player...")
 	player = CharacterBody2D.new()
 	player.script = preload("res://src/systems/player.gd")
 	player.position = Vector2(640, 360)
 	add_child(player)
 	print("Player created")
+
+	# Create UI manager AFTER player
+	print("Creating UI manager...")
+	var ui_manager = UIManager.new()
+	ui_manager.player = player
+	add_child(ui_manager)
+	print("UI manager created")
 
 	# Create enemy spawner
 	print("Creating enemy spawner...")

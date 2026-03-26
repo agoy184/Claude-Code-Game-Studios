@@ -12,14 +12,12 @@ var bg_bar: ColorRect
 func _ready() -> void:
 	print("=== UI MANAGER READY ===")
 
-	# Get player reference from parent
-	var parent = get_parent()
-	if parent and parent.has_node("Player"):
-		player = parent.get_node("Player")
-		print("UI: Player found")
-	else:
-		print("UI: Player NOT found")
+	# Player should be set by GameManager before this is called
+	if not player:
+		print("UI: Player NOT set!")
 		return
+
+	print("UI: Player found")
 
 	# Create background bar (dark red)
 	bg_bar = ColorRect.new()
@@ -46,6 +44,8 @@ func _ready() -> void:
 	if player.stats:
 		player.stats.health_changed.connect(_on_health_changed)
 		_on_health_changed(player.stats.current_health, player.stats.max_health)
+
+	print("UI: Ready complete")
 
 func _on_health_changed(current: int, max_val: int) -> void:
 	print("UI: Health updated to %d/%d" % [current, max_val])

@@ -10,7 +10,7 @@ var base_hit_chance: float = 0.8  # 80% base hit
 var crit_multiplier: float = 1.5
 
 signal luck_changed(new_value: int)
-signal critical_hit(damage: int)
+signal critical_hit(damage: int)  # TODO: Listen to this for critical hit effects/feedback
 signal miss_event
 
 ## Hit chance is modified by luck (soft cap at 95%)
